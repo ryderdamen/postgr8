@@ -1,0 +1,45 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backup-postgres-example
+  labels:
+    app: example-app
+spec:
+  schedule: "0 1 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+          - name: google-cloud-key
+            secret:
+              secretName: example-postgres-secrets
+          containers:
+          - name: backup-postgres-example
+            image: gcr.io/your-google-cloud-project-id/postgres-backup:0.0.1
+            imagePullPolicy: Always
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+              - name: GOOGLE_APPLICATION_CREDENTIALS
+                value: "/var/secrets/google/gcp_service_account.json"
+              - name: GCS_FULL_BUCKET_UPLOAD_PATH
+                value: "gs://your-google-cloud-project-id-database-backups"
+              - name: POSTGRES_DATABASE_NAME
+                value: postgres
+              - name: PGHOST
+                value: example-postgres.default.svc.cluster.local
+              - name: POSTGRES_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: example-postgres-secrets
+                    key: postgres_username
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: example-postgres-secrets
+                    key: postgres_password
+              - name: POSTGRES_PORT
+                value: "5432"
+          restartPolicy: OnFailure

@@ -1,0 +1,6 @@
+# Regular Stuff
+**/DS_Store
+
+# Kubernetes secrets
+**/*secret.yaml
+**/*secrets.yaml
