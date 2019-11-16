@@ -16,7 +16,7 @@ spec:
               secretName: example-postgres-secrets
           containers:
           - name: backup-postgres-example
-            image: gcr.io/your-google-cloud-project-id/postgres-backup:0.0.1
+            image: ryderdamen/postgres-backup:11
             imagePullPolicy: Always
             volumeMounts:
             - name: google-cloud-key

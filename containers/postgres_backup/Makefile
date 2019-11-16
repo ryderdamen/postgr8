@@ -1,5 +1,5 @@
-IMAGE_NAME=gcr.io/your-google-cloud-project-id/postgres-backup
-VERSION=0.0.1
+IMAGE_NAME=ryderdamen/postgres-backup
+VERSION=11
 
 .PHONY: build
 build:
